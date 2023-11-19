@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz de Química</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            text-align: center;
+        }
+        
+        .quiz-container {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        h1 {
+            font-size: 30px;
+        }
+
+        #question{
+            font-size: large;
+            font-weight: 600;
+        }
+
+        #options {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-top: 10px;
+            text-align: start;
+        }
+
+        .option {
+            font-size: 18px;
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            cursor: pointer;
+            width: 90%;
+        }
+
+        .option:hover{
+            box-shadow: 5px 5px black;
+        }
+
+        #result {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        #next-button {
+            background-color: #001fcc;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 18px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
+        #restart-button{
+            background-color: #001fcc;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 18px;
+            margin-top: 20px;
+            cursor: pointer;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Quiz de Química</h1>
+        <div id="question-box">
+            <p id="question"></p>
+            <ul id="options">
+                <li class="option"></li>
+                <li class="option"></li>
+                <li class="option"></li>
+                <li class="option"></li>
+            </ul>
+        </div>
+        <p id="result"></p>
+        <button id="next-button">Próxima</button>
+        <button id="restart-button" onclick="location.reload()">Reiniciar</button>
+    </div>
+
+    <script>
+        const question = document.getElementById('question');
+        const options = document.querySelectorAll('.option');
+        const result = document.getElementById('result');
+        const nextButton = document.getElementById('next-button');
+        const questionBox = document.getElementById('question-box');
+        const restartButton = document.getElementById('restart-button');
+
+        let questions = [
+        {
+                questionText: 'Qual é o número atômico do hidrogênio?',
+                options: ['1', '2', '3', '4'],
+                correctOption: 0,
+            },
+            {
+                questionText: 'O que representa a sigla "Na" na tabela periódica?',
+                options: ['Néon', 'Níquel', 'Sódio', 'Potássio'],
+                correctOption: 2,
+            },
+            {
+                questionText: 'Quantos elétrons um átomo de hidrogênio possui?',
+                options: ['1', '2', '0', '3'],
+                correctOption: 0,
+            },
+            {
+                questionText: 'Qual é a fórmula química da água?',
+                options: ['CH4', 'CO2', 'O2', 'H2O'],
+                correctOption: 3,
+            },
+            {
+                questionText: 'Qual é o símbolo químico do carbono?',
+                options: [ 'Ca','C', 'Co', 'Cr'],
+                correctOption: 1,
+            },
+            {
+                questionText: 'Qual é o estado natural do oxigênio na atmosfera?',
+                options: [ 'Sólido' , 'Líquido', 'Gasoso' , 'Nenhum'],
+                correctOption: 2,
+            },
+            {
+                questionText: 'Quantos elétrons um átomo de oxigênio possui?',
+                options: ['4', '6', '2', '8'],
+                correctOption: 3,
+            },
+            {
+                questionText: 'Qual é a fórmula química do dióxido de carbono?',
+                options: ['H2O', 'CO2', 'O2', 'CH4'],
+                correctOption: 1,
+            },
+            {
+                questionText: 'Qual é a sigla de pH que representa um meio neutro?',
+                options: ['14', '0', '7', '1'],
+                correctOption: 2,
+            },
+            {
+                questionText: 'Qual é a fórmula química do sal de cozinha?',
+                options: ['H2O', 'H2SO4', 'C6H12O6', 'NaCl'],
+                correctOption: 3,
+            },
+            {
+                questionText: 'Quantos elétrons de valência um átomo de cloro possui?',
+                options: ['7', '1', '8', '2'],
+                correctOption: 0,
+            },
+            {
+                questionText: 'Qual é o símbolo químico do ferro?',
+                options: ['Fr', 'Fe', 'Fl', 'F'],
+                correctOption: 1,
+            },
+            {
+                questionText: 'O que é um composto químico?',
+                options: ['Substância formada por átomos de um único elemento químico.', 'Substância formada por átomos do mesmo elemento químico.', 'Substância formada por átomos de dois ou mais elementos químicos diferentes.', 'Substância formada por átomos de elementos químicos não relacionados.'],
+                correctOption: 2,
+            },
+            {
+                questionText: 'Qual é o nome da reação química que libera luz e calor?',
+                options: ['Neutralização', 'Oxidação', 'Redução', 'Combustão'],
+                correctOption: 3,
+            },
+            {
+                questionText: 'Qual é o processo de separação de sólidos de líquidos em química?',
+                options: ['Filtração', 'Destilação', 'Decantação', 'Cristalização'],
+                correctOption: 0,
+            },
+            {
+                questionText: 'Qual é o gás presente na atmosfera responsável por absorver a radiação ultravioleta?',
+                options: ['Dióxido de carbono', 'Ozônio', 'Nitrogênio', 'Hidrogênio'],
+                correctOption: 1,
+            },
+            {
+                questionText: 'Qual é o nome do composto químico com a fórmula H2SO4?',
+                options: ['Ácido nítrico', 'Ácido clorídrico', 'Ácido sulfúrico', 'Ácido acético'],
+                correctOption: 2,
+            },
+            {
+                questionText: 'O que é um íon?',
+                options: [ 'Um tipo de reação química.', 'Átomo que possui elétrons na mesma camada.', 'Substância química gasosa.','Átomo que perdeu ou ganhou elétrons, tornando-se eletricamente carregado.'],
+                correctOption: 3,
+            },
+            {
+                questionText: 'Qual é a unidade de massa atômica?',
+                options: ['Dalton', 'Gramas', 'Mols', 'Átomos'],
+                correctOption: 0,
+            },
+            {
+                questionText: 'O que é uma ligação covalente?',
+                options: ['Transferência de elétrons de um átomo para outro.', 'Compartilhamento de elétrons entre átomos.', 'Atração eletrostática entre íons de cargas opostas.', 'Atração entre átomos com forças de van der Waals.'],
+                correctOption: 1,
+            },
+            {
+                questionText: 'Qual é a sigla "O2" na química?',
+                options: ['Ozônio', 'Gás carbônico', 'Dióxido de oxigênio', 'Ácido sulfúrico'],
+                correctOption: 2,
+            },
+            {
+                questionText: 'Qual é o elemento mais abundante na crosta terrestre?',
+                options: ['Ferro', 'Silício', 'Alumínio', 'Oxigênio'],
+                correctOption: 3,
+            },
+            {
+                questionText: 'Qual é o nome da reação química que converte glicose em energia nas células?',
+                options: ['Respiração celular', 'Fotossíntese', 'Decomposição', 'Síntese de proteínas'],
+                correctOption: 0,
+            },
+            {
+                questionText: 'O que é a tabela periódica?',
+                options: ['Uma ferramenta de medição de densidade.', 'Tabela que organiza os elementos químicos de acordo com suas propriedades.', 'Um tipo de substância química.', 'Um tipo de equipamento de laboratório.'],
+                correctOption: 1,
+            },
+        ];
+
+        // Função para embaralhar as perguntas no início do jogo
+        shuffleArray(questions);
+
+        let currentQuestionIndex = 0;
+        let correctAnswers = 0; // Número de respostas corretas
+
+        nextButton.addEventListener('click', () => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                showQuestion(questions[currentQuestionIndex]);
+            } else {
+                result.textContent = `Você acertou todas as perguntas. Parabéns!`;
+                const options = document.getElementById('options');
+                options.innerHTML = '';
+                question.innerHTML = '';
+                nextButton.style.display = 'none';
+                restartButton.style.display = 'block';
+                const imagem = new Image();
+                imagem.src = '../assets/img/oppenheimer.jpg';
+                imagem.width = 300; // largura da imagem em pixels
+                imagem.height = 200; // altura da imagem em pixels
+                options.appendChild(imagem); // Adicione a imagem ao corpo do documento
+            }
+        });
+
+        // Função para embaralhar um array
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        // Função para exibir uma pergunta
+        function showQuestion(questionObj) {
+            question.textContent = `Pergunta ${currentQuestionIndex + 1}: ${questionObj.questionText}`;
+
+            const optionLetters = ['A', 'B', 'C', 'D'];
+
+            options.forEach((option, index) => {
+                option.textContent = `${optionLetters[index]}. ${questionObj.options[index]}`;
+                option.addEventListener('click', () => checkAnswer(questionObj.options[index], questionObj.options[questionObj.correctOption]));
+            });
+            result.textContent = '';
+            nextButton.style.display = 'none';
+            questionBox.classList.remove('correct');
+        }
+        
+
+        // Função para verificar a resposta
+        function checkAnswer(selectedOption, correctOption) {
+            if (selectedOption === correctOption) {
+                result.textContent = `Resposta correta!`;
+                nextButton.style.display = 'block';
+                questionBox.style.display = 'block';
+                restartButton.style.display = 'none'
+            } else {
+                if(currentQuestionIndex > 4){
+                    result.textContent = `Resposta incorreta. Você acertou ${currentQuestionIndex} de ${questions.length}. Parabéns!`;
+                }else{
+                    result.textContent = `Resposta incorreta. Você acertou ${currentQuestionIndex} de ${questions.length}.`;
+                }
+                questionBox.classList.add('correct');
+                questionBox.style.display = 'none';
+                nextButton.style.display = 'none';
+                restartButton.style.display = 'block'
+            }
+        }
+
+
+        document.addEventListener("keydown", function(event) {
+            if(nextButton.style.display === 'block'){
+                if (event.key === "Enter") {
+                    nextButton.click();
+                }
+            }
+        });
+
+        // Exibir a primeira pergunta ao carregar a página
+        showQuestion(questions[currentQuestionIndex]);
+    </script>
+</body>
+</html>
